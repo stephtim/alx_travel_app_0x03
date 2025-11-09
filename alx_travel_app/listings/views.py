@@ -159,32 +159,6 @@ def verify_payment(request, tx_ref):
     except Exception as e:
         return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
-    @api_view(['POST'])
-def chapa_callback(request):
-    """
-    Receives a callback (webhook) from Chapa after payment completion.
-    Verifies the tx_ref and updates the Payment status accordingly.
-    """
-    data = request.data
-    tx_ref = data.get('tx_ref')
-    payment_status = data.get('status')  # e.g., "success", "failed"
-
-    if not tx_ref or not payment_status:
-        return Response({"error": "Missing tx_ref or status"}, status=status.HTTP_400_BAD_REQUEST)
-
-    try:
-        payment = Payment.objects.get(transaction_id=tx_ref)
-    except Payment.DoesNotExist:
-        return Response({"error": "Payment not found"}, status=status.HTTP_404_NOT_FOUND)
-
-    if payment_status == "success":
-        payment.status = "COMPLETED"
-    else:
-        payment.status = "FAILED"
-
-    payment.save()
-
-    return Response({"message": "Payment status updated", "status": payment.status}, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def create_booking_and_payment(request):

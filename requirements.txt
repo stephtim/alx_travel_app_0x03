@@ -1,0 +1,12 @@
+Django==5.2.6
+djangorestframework
+drf-yasg
+django-celery-results
+celery==5.3.6
+gunicorn
+whitenoise
+dj-database-url
+psycopg2-binary
+requests
+python-dotenv
+django-cors-headers
